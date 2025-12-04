@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message Video {
+    int32 video_id = 1;
+    int32 user_id = 2;
+    int64 start = 3;
+    int64 end = 4;
+    double lon = 5;
+    double lat = 6;
+    double min_lon = 7;
+    double max_lon = 8;
+    double min_lat = 9;
+    double max_lat = 10;
+    int32 status = 11;
+}

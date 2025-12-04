@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message Frame {
+    int32 frame_id = 1;
+    int32 video_id = 2;
+    string frame_item_id = 3;
+    string frame_item_href = 4;
+    string blue_href = 5;
+    string green_href = 6;
+    string red_href = 7;
+    double min_lon = 8;
+    double max_lon = 9;
+    double min_lat = 10;
+    double max_lat = 11;
+    int32 collection_time_utc = 12;
+    int32 status = 13;
+}
