@@ -13,5 +13,6 @@ message Frame {
     double min_lat = 10;
     double max_lat = 11;
     int32 collection_time_utc = 12;
-    int32 status = 13;
+    repeated int64 image_data = 13;
+    int32 status = 14;
 }

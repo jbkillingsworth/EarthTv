@@ -1,8 +1,8 @@
-from db.postgres import Postgres
+from source.db.postgres import Postgres
 from datetime import datetime, date
 import calendar
 import pytz
-from proto import video_pb2
+from source.proto import video_pb2
 
 class Video:
     def __init__(self, video_id: int, user_id: int, start: date, end: date, lon: float, lat: float,

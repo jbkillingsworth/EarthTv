@@ -1,5 +1,5 @@
-from db.postgres import Postgres
-from python.video.video import Video
+from source.db.postgres import Postgres
+from source.video.video import Video
 from datetime import date
 
 lon = -86.541016

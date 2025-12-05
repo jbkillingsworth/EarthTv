@@ -1,10 +1,11 @@
-from db.postgres import Postgres
+from source.db.postgres import Postgres
 import redis
-from video.video import Video
-from frame import Frame
-from frame import get_items
+from source.video.video import Video
+from source.frame.frame import Frame
+from source.frame.frame import get_items
 import time
 from datetime import datetime
+import base64
 
 db_util = Postgres()
 r = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
@@ -29,10 +30,11 @@ while True:
             status = 0
             frame_id=-1
             user_id = 0
+            image_data = [1,2,3]
             datetime_object = datetime.fromisoformat(collection_time.replace('Z', '+00:00'))
             frame_image = Frame(frame_id, video.message.video_id, frame_item_id, frame_href, unsigned_blue_href,
                                 unsigned_green_href, unsigned_red_href, min_lon, max_lon, min_lat, max_lat,
-                                int(datetime_object.timestamp()), status)
+                                datetime_object, image_data, status)
             frame_image.new_request(db_util)
 
     except Exception as ex:

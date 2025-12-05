@@ -1,5 +1,5 @@
-from db.postgres import Postgres
-from python.video.video import Video
+from source.db.postgres import Postgres
+from source.video.video import Video
 from redis import Redis
 import time
 

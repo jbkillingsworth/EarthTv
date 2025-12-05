@@ -2,11 +2,14 @@ from datetime import datetime
 import pystac
 import pystac_client
 import planetary_computer
-from python.video.video import Video
-from db.postgres import Postgres
+from source.video.video import Video
+from source.db.postgres import Postgres
 import calendar
 import pytz
-from proto import frame_pb2
+from source.proto import frame_pb2
+import pickle
+import numpy as np
+from io import BytesIO
 
 def get_items(video: Video) -> pystac.item_collection.ItemCollection:
 
@@ -38,7 +41,8 @@ class Frame:
     def __init__(self, frame_id: int, video_id: int, frame_item_id: str,
                  frame_item_href: str, blue_href: str, green_href: str,
                  red_href: str, min_lon: float, max_lon: float,
-                 min_lat: float, max_lat: float, collection_time_utc: int, status: int = 0):
+                 min_lat: float, max_lat: float, collection_time_utc: int,
+                 image_data: list[int], status: int = 0):
         self.message = frame_pb2.Frame()
         self.message.frame_id = frame_id
         self.message.video_id = video_id
@@ -51,8 +55,19 @@ class Frame:
         self.message.max_lon = max_lon
         self.message.min_lat = min_lat
         self.message.max_lat = max_lat
-        self.message.collection_time_utc = collection_time_utc
+        self.message.collection_time_utc = int(collection_time_utc.timestamp())
+        self.message.image_data = image_data
         self.message.status = status
+
+    @staticmethod
+    def from_bytes(bytes):
+        message = frame_pb2.Frame()
+        message.ParseFromString(bytes)
+        collection_time_utc = datetime.utcfromtimestamp(message.collection_time_utc)
+        return Frame(message.frame_id, message.video_id, message.frame_item_id, message.frame_item_href,
+                     message.blue_href, message.green_href, message.red_href,
+                     message.min_lon, message.max_lon, message.min_lat,
+                     message.max_lat, collection_time_utc, message.image_data, message.status)
 
     def new_request(self, db_util: Postgres):
         try:
@@ -60,8 +75,8 @@ class Frame:
             collection_time_utc = eastern.localize(datetime.utcfromtimestamp(self.message.collection_time_utc))
             query = ("INSERT INTO frame (video_id, frame_item_id, frame_item_href, \
             blue_href, green_href, red_href, min_lon, max_lon, \
-            min_lat, max_lat, collection_time_utc, status) \
-                     VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, {}, {}, {}, '{}', {})".format(
+            min_lat, max_lat, collection_time_utc, image_data, status) \
+                     VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, {}, {}, {}, '{}', {}, {})".format(
                                                                                  self.message.video_id,
                                                                                  self.message.frame_item_id,
                                                                                  self.message.frame_item_href,
@@ -72,14 +87,35 @@ class Frame:
                                                                                  self.message.max_lon,
                                                                                  self.message.min_lat,
                                                                                  self.message.max_lat,
-                                                                                 collection_time_utc,
+                                                                                 collection_time_utc, self.message.image_data,
                                                                                  self.message.status))
             db_util.cur.execute(query)
             db_util.conn.commit()
         except Exception as ex:
             raise ex
 
+    def get_video_lat_lon(self, video_id:int, db_util: Postgres):
+        try:
+            query = ("SELECT lat, lon FROM video WHERE video_id = {}".format(video_id))
+            db_util.cur.execute(query)
+            db_util.conn.commit()
+            lat, lon = db_util.cur.fetchone()
+            return lat, lon
+        except Exception as ex:
+            raise ex
 
+    def set_image_data(self, db_util: Postgres):
+        try:
+
+            query = ("UPDATE frame \
+                     SET image_data = {} \
+                     WHERE frame_id = {};".format(self.message.image_data, self.message.frame_id))
+            db_util.cur.execute(query)
+            db_util.conn.commit()
+            lat, lon = db_util.cur.fetchone()
+            return lat, lon
+        except Exception as ex:
+            raise ex
 # items = get_items(lon, lat, start, end)
 
 
