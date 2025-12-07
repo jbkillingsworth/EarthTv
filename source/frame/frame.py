@@ -10,6 +10,7 @@ from source.proto import frame_pb2
 import pickle
 import numpy as np
 from io import BytesIO
+import psycopg2
 
 def get_items(video: Video) -> pystac.item_collection.ItemCollection:
 
@@ -56,7 +57,7 @@ class Frame:
         self.message.min_lat = min_lat
         self.message.max_lat = max_lat
         self.message.collection_time_utc = int(collection_time_utc.timestamp())
-        self.message.image_data = image_data
+        self.message.image_data = bytes(image_data)
         self.message.status = status
 
     @staticmethod
@@ -71,6 +72,7 @@ class Frame:
 
     def new_request(self, db_util: Postgres):
         try:
+            ds = np.frombuffer(self.message.image_data, dtype=np.float64)
             eastern = pytz.timezone('America/New_York')
             collection_time_utc = eastern.localize(datetime.utcfromtimestamp(self.message.collection_time_utc))
             query = ("INSERT INTO frame (video_id, frame_item_id, frame_item_href, \
@@ -87,7 +89,7 @@ class Frame:
                                                                                  self.message.max_lon,
                                                                                  self.message.min_lat,
                                                                                  self.message.max_lat,
-                                                                                 collection_time_utc, self.message.image_data,
+                                                                                 collection_time_utc, psycopg2.Binary(ds),
                                                                                  self.message.status))
             db_util.cur.execute(query)
             db_util.conn.commit()
@@ -106,14 +108,12 @@ class Frame:
 
     def set_image_data(self, db_util: Postgres):
         try:
-
+            ds = np.frombuffer(self.message.image_data, dtype=np.float64)
             query = ("UPDATE frame \
                      SET image_data = {} \
-                     WHERE frame_id = {};".format(self.message.image_data, self.message.frame_id))
+                     WHERE frame_id = {};".format(psycopg2.Binary(ds), self.message.frame_id))
             db_util.cur.execute(query)
             db_util.conn.commit()
-            lat, lon = db_util.cur.fetchone()
-            return lat, lon
         except Exception as ex:
             raise ex
 # items = get_items(lon, lat, start, end)

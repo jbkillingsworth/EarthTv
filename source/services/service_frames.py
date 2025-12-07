@@ -2,6 +2,7 @@ from source.db.postgres import Postgres
 from source.frame.frame import Frame
 from redis import Redis
 import time
+import numpy as np
 
 def get_next_frame_request(db_util: Postgres) -> Frame:
     query = "SELECT frame_id, video_id, frame_item_id, frame_item_href, \

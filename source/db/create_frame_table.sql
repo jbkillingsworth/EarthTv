@@ -12,5 +12,6 @@ CREATE TABLE frame (
 	max_lat DECIMAL NOT NULL,
 	collection_time_utc TIMESTAMPTZ NOT NULL,
 	status SMALLINT NOT NULL,
+	image_data BYTEA NOT NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

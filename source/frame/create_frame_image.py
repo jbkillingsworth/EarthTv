@@ -17,7 +17,7 @@ import numpy as np
 from io import BytesIO
 
 db_util = Postgres()
-r = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
+redis_queue = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
 
 target_crs = "EPSG:32616"
 source_crs = "EPSG:4326"
@@ -25,7 +25,7 @@ transformer = pyproj.Transformer.from_crs(source_crs, target_crs, always_xy=True
 
 while True:
     try:
-        frame = Frame.from_bytes(r.lpop('frames'))
+        frame = Frame.from_bytes(redis_queue.lpop('frames'))
         r = requests.get(
             frame.message.frame_item_href
         )
@@ -48,10 +48,10 @@ while True:
         green = dsg.rio.clip_box(minx=easting-meters_width, miny=northing-meters_height, maxx=easting+meters_width, maxy=northing+meters_height)
         red = dsr.rio.clip_box(minx=easting-meters_width, miny=northing-meters_height, maxx=easting+meters_width, maxy=northing+meters_height)
         ds = np.dstack([red.to_numpy()[0,:,:]/red.to_numpy().max(), blue.to_numpy()[0,:,:]/blue.to_numpy().max(), green.to_numpy()[0,:,:]/green.to_numpy().max()])
-        buffer = BytesIO()
-        np.save(buffer, ds)
-        npy_bytes = buffer.getvalue()
-        frame.message.image_data = npy_bytes#ds.tobytes(order='C')
+        # buffer = BytesIO()
+        # np.save(buffer, ds)
+        # npy_bytes = buffer.getvalue()
+        frame.message.image_data = bytes(ds)#ds.tobytes(order='C')
         frame.set_image_data(db_util)
     except Exception as ex:
         time.sleep(1)
