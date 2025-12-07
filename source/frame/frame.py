@@ -2,8 +2,8 @@ from datetime import datetime
 import pystac
 import pystac_client
 import planetary_computer
-from source.video.video import Video
-from source.db.postgres import Postgres
+from video.video import Video
+from db.postgres import Postgres
 import calendar
 import pytz
 from source.proto import frame_pb2
@@ -110,7 +110,7 @@ class Frame:
         try:
             ds = np.frombuffer(self.message.image_data, dtype=np.float64)
             query = ("UPDATE frame \
-                     SET image_data = {} \
+                     SET image_data = {}, status = 1 \
                      WHERE frame_id = {};".format(psycopg2.Binary(ds), self.message.frame_id))
             db_util.cur.execute(query)
             db_util.conn.commit()

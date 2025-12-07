@@ -3,6 +3,7 @@ from datetime import datetime, date
 import calendar
 import pytz
 from source.proto import video_pb2
+from source.frame.frame import Frame
 
 class Video:
     def __init__(self, video_id: int, user_id: int, start: date, end: date, lon: float, lat: float,
@@ -46,5 +47,18 @@ class Video:
                                                                                      self.message.status))
             db_util.cur.execute(query)
             db_util.conn.commit()
+        except Exception as ex:
+            raise ex
+
+    def get_frames(self, db_util: Postgres):
+        try:
+            query = "SELECT video_id, frame_item_id, frame_item_href, \
+                     blue_href, green_href, red_href, min_lon, max_lon, \
+                     min_lat, max_lat, collection_time_utc, image_data, status \
+                     FROM frame WHERE video_id = {}".format(self.message.video_id)
+            db_util.cur.execute(query)
+            db_util.conn.commit()
+            while (record := db_util.cur.fetchone()) != None:
+                yield Frame(*record)
         except Exception as ex:
             raise ex
