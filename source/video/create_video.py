@@ -19,8 +19,15 @@ redis_queue = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCD
 while True:
     try:
         video = Video.from_bytes(redis_queue.lpop('videos-assembly-ready'))
-        for frame in video.get_frames(db_util):
-            print(frame)
+        frames = video.get_frames(db_util)
+        frames_list = []
+        for frame in frames:
+            ds = np.frombuffer(frame.message.image_data, dtype=np.float64)
+            ds = ds.reshape(
+                frame.message.img_height, frame.message.img_width, 3
+            )
+            frames_list.append(ds)
+        video.assemble_frames(frames_list)
 
 
     except Exception as ex:

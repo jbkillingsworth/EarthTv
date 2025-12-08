@@ -4,6 +4,9 @@ import calendar
 import pytz
 from source.proto import video_pb2
 from source.frame.frame import Frame
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.animation as animation
 
 class Video:
     def __init__(self, video_id: int, user_id: int, start: date, end: date, lon: float, lat: float,
@@ -52,9 +55,9 @@ class Video:
 
     def get_frames(self, db_util: Postgres):
         try:
-            query = "SELECT video_id, frame_item_id, frame_item_href, \
+            query = "SELECT frame_id, video_id, frame_item_id, frame_item_href, \
                      blue_href, green_href, red_href, min_lon, max_lon, \
-                     min_lat, max_lat, collection_time_utc, image_data, status \
+                     min_lat, max_lat, collection_time_utc, image_data, img_width, img_height, status \
                      FROM frame WHERE video_id = {}".format(self.message.video_id)
             db_util.cur.execute(query)
             db_util.conn.commit()
@@ -62,3 +65,38 @@ class Video:
                 yield Frame(*record)
         except Exception as ex:
             raise ex
+
+    def assemble_frames(self, items_list):
+        ds = items_list[0]
+        ds = ds + ds.min()
+        ds = ds/ds.max()
+
+        h = ds.shape[0]
+        w = ds.shape[1]
+        fig = plt.figure(figsize=(10, 5.625))
+        ax = plt.axes(xlim=(0, w), ylim=(0, h))
+        ax.axis('off')
+        fig.subplots_adjust(left=-0.01, bottom=-0.01, right=1.01, top=1.01, wspace=None, hspace=None)
+        im=plt.imshow(ds, interpolation='none')
+
+        def animate(i):
+            print(i)
+            ds = items_list[i]
+            ds = ds + ds.min()
+            ds = ds/ds.max()
+            # print(t)
+            h = ds.shape[1]
+            w = ds.shape[2]
+            im.set_data(ds)
+            return [im]
+
+        fps = 1
+
+        anim = animation.FuncAnimation(
+            fig,
+            animate,
+            frames = len(items_list) - 1,#len(my_heap) - 1,
+            interval = 10000 / fps # in ms
+        )
+
+        anim.save('meridianville1.mp4', fps=fps, dpi=200)

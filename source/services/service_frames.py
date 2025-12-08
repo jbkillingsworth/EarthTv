@@ -7,7 +7,7 @@ import numpy as np
 def get_next_frame_request(db_util: Postgres) -> Frame:
     query = "SELECT frame_id, video_id, frame_item_id, frame_item_href, \
             blue_href, green_href, red_href, min_lon, max_lon, \
-            min_lat, max_lat, collection_time_utc, image_data, status \
+            min_lat, max_lat, collection_time_utc, image_data, img_width, img_height, status \
         FROM frame \
         WHERE status = 0 \
         ORDER BY created_at ASC \

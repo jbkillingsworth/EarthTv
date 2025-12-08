@@ -31,7 +31,7 @@ while True:
                 r.lpush('videos', video.message.SerializeToString())
                 r.set('video'+str(video.message.video_id), 0)
         elif video.message.status == 1:
-            if not r.exists('video-assembly-ready'+str(video.message.video_id)):
-                r.lpush('videos-assembly-ready', video.message.SerializeToString())
-                r.set('video-assembly-ready'+str(video.message.video_id), 1)
+            # if not r.exists('video-assembly-ready'+str(video.message.video_id)):
+            r.lpush('videos-assembly-ready', video.message.SerializeToString())
+            r.set('video-assembly-ready'+str(video.message.video_id), 1)
     time.sleep(1)

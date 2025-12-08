@@ -52,6 +52,8 @@ while True:
         # np.save(buffer, ds)
         # npy_bytes = buffer.getvalue()
         frame.message.image_data = bytes(ds)#ds.tobytes(order='C')
+        frame.message.img_width = ds.shape[1]
+        frame.message.img_height = ds.shape[0]
         frame.set_image_data(db_util)
     except Exception as ex:
         time.sleep(1)

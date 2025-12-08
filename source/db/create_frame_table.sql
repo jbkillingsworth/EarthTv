@@ -13,5 +13,7 @@ CREATE TABLE frame (
 	collection_time_utc TIMESTAMPTZ NOT NULL,
 	status SMALLINT NOT NULL,
 	image_data BYTEA NOT NULL,
+	img_width SMALLINT NOT NULL,
+	img_height SMALLINT NOT NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
