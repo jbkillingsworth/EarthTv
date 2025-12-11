@@ -10,37 +10,39 @@ import psycopg2
 import numpy as np
 
 db_util = Postgres()
-r = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
+r = redis.Redis(host='cache', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
 
 while True:
     try:
         video = Video.from_bytes(r.lpop('videos'))
         frames = get_items(video.message.start, video.message.end, video.bbox)
         for frame in frames:
-            collection_time = frame.properties['datetime']
-            frame_item_id = frame.id
-            frame_href = ""
-            for link in frame.links:
-                if link.rel == 'self':
-                    frame_href = link.href
-                    break
-            unsigned_blue_href = frame.assets['B02'].href
-            unsigned_green_href = frame.assets["B03"].href
-            unsigned_red_href = frame.assets["B04"].href
-            min_lon, min_lat, max_lon, max_lat = frame.bbox
-            geometry = frame.geometry
-            status = 0
-            frame_id=-1
-            user_id = 0
-            image_data = np.empty(1).tobytes()
-            datetime_object = datetime.fromisoformat(collection_time.replace('Z', '+00:00'))
-            img_width = 0
-            img_height = 0
-            frame_image = Frame(frame_id, video.message.video_id, frame_item_id, frame_href, unsigned_blue_href,
-                                unsigned_green_href, unsigned_red_href, min_lon, max_lon, min_lat, max_lat,
-                                datetime_object, memoryview(image_data), img_width, img_height, status)
-            frame_image.new_request(db_util)
+            if frame.properties["eo:cloud_cover"] < .5:
+                collection_time = frame.properties['datetime']
+                frame_item_id = frame.id
+                frame_href = ""
+                for link in frame.links:
+                    if link.rel == 'self':
+                        frame_href = link.href
+                        break
+                unsigned_blue_href = frame.assets['B02'].href
+                unsigned_green_href = frame.assets["B03"].href
+                unsigned_red_href = frame.assets["B04"].href
+                min_lon, min_lat, max_lon, max_lat = frame.bbox
+                geometry = frame.geometry
+                status = 0
+                frame_id=-1
+                user_id = 0
+                image_data = np.empty(1).tobytes()
+                datetime_object = datetime.fromisoformat(collection_time.replace('Z', '+00:00'))
+                img_width = 0
+                img_height = 0
+                frame_image = Frame(frame_id, video.message.video_id, frame_item_id, frame_href, unsigned_blue_href,
+                                    unsigned_green_href, unsigned_red_href, min_lon, max_lon, min_lat, max_lat,
+                                    datetime_object, memoryview(image_data), img_width, img_height, status)
+                frame_image.new_request(db_util)
+                # time.sleep(1)
 
     except Exception as ex:
-        time.sleep(1)
+        # time.sleep(1)
         print(ex)

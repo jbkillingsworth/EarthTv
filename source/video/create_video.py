@@ -14,7 +14,7 @@ import numpy as np
 from io import BytesIO
 
 db_util = Postgres()
-redis_queue = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
+redis_queue = redis.Redis(host='cache', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
 
 while True:
     try:
@@ -28,8 +28,10 @@ while True:
             )
             frames_list.append(ds)
         video.assemble_frames(frames_list)
+        # time.sleep(1)
 
 
     except Exception as ex:
-        time.sleep(1)
+        # time.sleep(1)
         print(ex)
+        # time.sleep(1)

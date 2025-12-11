@@ -7,6 +7,7 @@ from source.frame.frame import Frame
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
+import uuid
 
 class Video:
     def __init__(self, video_id: int, user_id: int, start: date, end: date, lon: float, lat: float,
@@ -99,4 +100,4 @@ class Video:
             interval = 10000 / fps # in ms
         )
 
-        anim.save('meridianville1.mp4', fps=fps, dpi=200)
+        anim.save('/app/output/' + str(uuid.uuid4()) + '.mp4', fps=fps, dpi=200)

@@ -8,11 +8,11 @@ class Postgres:
 
         try:
             self.conn = psycopg2.connect(
-                host=os.getenv("DB_HOST"),
-                database=os.getenv("DB_NAME"),
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PW"),
-                port=os.getenv("DB_PORT")
+                host='database',#os.getenv("DB_HOST"),
+                database='postgres',#os.getenv("DB_NAME"),
+                user='postgres',#os.getenv("DB_USER"),
+                password='postgres',#os.getenv("DB_PW"),
+                port='5432'#os.getenv("DB_PORT")
             )
 
             self.cur = self.conn.cursor()

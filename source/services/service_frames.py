@@ -25,7 +25,7 @@ import redis
 
 db_util = Postgres()
 
-r = redis.Redis(host='localhost', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
+r = redis.Redis(host='cache', port=6379, password="eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81")
 
 while True:
     request_iter = get_next_frame_request(db_util)
@@ -34,4 +34,4 @@ while True:
         if not r.exists("frame-"+str(frame.message.frame_id)):
             r.lpush('frames', frame.message.SerializeToString())
             r.set("frame-"+str(frame.message.frame_id), 0)
-    time.sleep(1)
+    # time.sleep(1)
