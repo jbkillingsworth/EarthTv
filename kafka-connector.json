@@ -1,0 +1,14 @@
+{
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "database.hostname": "database",
+  "database.port": "5432",
+  "database.user": "postgres",
+  "database.password": "postgres",
+  "database.dbname": "postgres",
+  "database.server.name": "dbserver1",
+  "table.include.list": "public.video",
+  "plugin.name": "pgoutput",
+  "slot.name": "postgres_slot",
+  "publication.name": "postgres_publication",
+  "topic.prefix": "dbserver1"
+}

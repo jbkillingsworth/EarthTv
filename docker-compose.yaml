@@ -24,7 +24,7 @@ services:
       - '5432:5432'
     volumes:
       - database:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./source/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -35,6 +35,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    command: ["postgres", "-c", "wal_level=logical"]
 
 
   broker:
@@ -63,6 +64,7 @@ services:
 
 
 
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-cluster-ui
@@ -71,8 +73,32 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:19092
+
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: debezium
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://debezium:8083
+      DYNAMIC_CONFIG_ENABLED: 'true'
+#      AUTH_TYPE: LOGIN_FORM  # Authentication type for Kafka UI
+#      SPRING_SECURITY_USER_NAME: admin  # username to login to ui
+#      SPRING_SECURITY_USER_PASSWORD: Admin@123
     depends_on:
       - broker
+      - debezium
+
+  # Debezium: Change Data Capture (CDC) connector
+  debezium:
+    image: debezium/connect:2.7.3.Final  # Official Debezium Connect image
+    depends_on:
+      - broker
+      - database  # Ensures Debezium starts after Kafka and PostgreSQL
+    ports:
+      - 8083:8083  # Maps Debezium port 8083 from the container to the host, Expose Debezium Connect REST API
+    environment:
+      GROUP_ID: 1001  # Unique ID for this Connect cluster
+      CONFIG_STORAGE_TOPIC: my_connect_configs  # Kafka topic for connector configs
+      OFFSET_STORAGE_TOPIC: my_connect_offsets  # Kafka topic for connector offsets
+      STATUS_STORAGE_TOPIC: my_connect_statuses  # Kafka topic for connector statuses
+      BOOTSTRAP_SERVERS: broker:19092
+
 
 
 volumes:
