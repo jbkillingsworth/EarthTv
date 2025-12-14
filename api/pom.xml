@@ -45,6 +45,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!--https://docs.confluent.io/platform/current/installation/versions-interoperability.html-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>4.1.1</version>
+        </dependency>
 	</dependencies>
 
 	<build>
