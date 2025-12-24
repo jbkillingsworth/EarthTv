@@ -13,6 +13,7 @@ CREATE TABLE video (
 	min_lat DECIMAL NOT NULL,
 	max_lat DECIMAL NOT NULL,
 	status SMALLINT NOT NULL,
+	query_id VARCHAR(100) NOT NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -33,6 +34,14 @@ CREATE TABLE frame (
 	image_data BYTEA NOT NULL,
 	img_width SMALLINT NOT NULL,
 	img_height SMALLINT NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE page (
+    page_id SERIAL PRIMARY KEY,
+--    video_id BIGINT NOT NULL,
+    query_id VARCHAR(500) NOT NULL,
+    status SMALLINT NOT NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
