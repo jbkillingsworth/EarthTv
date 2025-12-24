@@ -57,6 +57,11 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.8</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>4.33.0</version> <!-- Use latest 2025 version -->
+        </dependency>
     </dependencies>
 
 	<build>
