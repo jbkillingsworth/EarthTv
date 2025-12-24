@@ -1,5 +1,10 @@
 syntax = "proto3";
-
+// The Java package for the generated classes
+option java_package = "com.earthtv";
+// Generates separate .java files for each message/enum
+option java_multiple_files = true;
+// The name of the wrapper class for the entire file
+option java_outer_classname = "FrameProtos";
 message Frame {
     int32 frame_id = 1;
     int32 video_id = 2;
