@@ -1,4 +1,7 @@
-
+create-protos:
+	cd source/proto && protoc --python_out=. --proto_path=. video.proto && \
+protoc --python_out=. --proto_path=. frame.proto && \
+protoc -I=. --java_out=. video.proto && protoc -I=. --java_out=. frame.proto
 
 build-base-image:
 	cp source/requirements.txt docker && cd docker && docker build . -t earthtv:latest
