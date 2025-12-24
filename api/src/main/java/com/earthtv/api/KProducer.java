@@ -25,7 +25,7 @@ public class KProducer {
 
         try {
             for (long index = 1; index <= sendMessageCount; index++) {
-                final ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, "key", "value");
+                final ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, "request<lon, lat>", "(-120, 40)");
                 producer.send(record, (metadata, exception) -> {
                     if (exception == null) {
                         System.out.printf("Sent record (key=%s value=%s) to topic %s partition %d at offset %d%n",
@@ -34,10 +34,6 @@ public class KProducer {
                         exception.printStackTrace();
                     }
                 });
-//                producer.flush();
-//                RecordMetadata metadata = producer.send(record).get();
-//                System.out.printf("sent record(key=%s value='%s')" + " metadata(partition=%d, offset=%d)\n",
-//                        record.key(), record.value(), metadata.partition(), metadata.offset());
             }
         } finally {
             producer.flush();
