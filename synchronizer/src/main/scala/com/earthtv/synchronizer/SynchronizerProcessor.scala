@@ -22,17 +22,11 @@ class SynchronizerProcessor extends Processor[String, VideoOuterClass.Video, Str
     val oldValue = Option(kvStore.get(key)).getOrElse(0L)
     val newValue = oldValue + 1L
 
-    // Update the state store
     kvStore.put(key, newValue)
 
-//    val video: VideoOuterClass.Video = record.value()//VideoOuterClass.Video.parser().parseFrom(record.value())
-
-    // Forward the result downstream
     val outputRecord = new Record(key, key+"_", record.timestamp())
-//    this.process(outputRecord)
-    this.context.forward(outputRecord)
 
-//    context.forward(outputRecord) // Optional: send to next processor/sink
+    this.context.forward(outputRecord)
   }
 
   override def close(): Unit = {} // Cleanup resources if necessary
