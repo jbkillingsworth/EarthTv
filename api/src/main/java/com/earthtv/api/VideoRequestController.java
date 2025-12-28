@@ -15,8 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import com.earthtv.api.FrameOuterClass;
 
 @RestController
 @RequestMapping("/create-video-request")
@@ -25,6 +27,7 @@ public class VideoRequestController {
 
     DataBase db = new DataBase();
     int collection = 0;
+    double WINDOW_SIZE = 0.001;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public IResponse createRequest(@RequestParam("longitude") String longitude,
@@ -37,19 +40,45 @@ public class VideoRequestController {
 //            collection = "eo:sentinel-1";
 
             IProps props = new Props(this.collection, new BigDecimal(longitude), new BigDecimal(latitude), this.db);
-
-            IActions videoActions = new Video(props);
             IActions pageActions = new Page(props);
 
-            List<IActions> actions = new ArrayList<>();
-            actions.add(videoActions);
-            actions.add(pageActions);
+            double doubleLongitude = Double.parseDouble(longitude);
+            double doubleLatitude = Double.parseDouble(latitude);
 
-            IController controller = new Controller(actions);
-            IController.updateItems(controller);
 
-            KProducer.runProducer(10);
+            VideoOuterClass.Video video = VideoOuterClass.Video.getDefaultInstance();
+
+            VideoOuterClass.Video.Builder builder = video.newBuilderForType();
+            builder.setVideoId(-1);
+            builder.setUserId(-1);
+            builder.setStart(-1);
+            builder.setEnd(Instant.now().getEpochSecond());
+            builder.setLon(doubleLongitude);
+            builder.setLat(doubleLatitude);
+            builder.setMinLon(doubleLongitude - WINDOW_SIZE);
+            builder.setMaxLon(doubleLongitude + WINDOW_SIZE);
+            builder.setMinLat(doubleLatitude - WINDOW_SIZE);
+            builder.setMaxLat(doubleLatitude + WINDOW_SIZE);
+            builder.setStatus(-1);
+
+            KProducer.runProducer(builder.build());
+
             return new Response(pageActions.getProps(), 0);
+
+
+//            IProps props = new Props(this.collection, new BigDecimal(longitude), new BigDecimal(latitude), this.db);
+//
+//            IActions videoActions = new Video(props);
+//            IActions pageActions = new Page(props);
+//
+//            List<IActions> actions = new ArrayList<>();
+//            actions.add(videoActions);
+//            actions.add(pageActions);
+//
+//            IController controller = new Controller(actions);
+//            IController.updateItems(controller);
+
+
         } catch (NumberFormatException e){
             return new Response(-1);
         }
