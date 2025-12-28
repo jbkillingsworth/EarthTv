@@ -1,11 +1,10 @@
 package com.earthtv.api;
 
-import com.earthtv.api.actions.video.Video;
-import com.google.protobuf.ByteString;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
-import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.serialization.ByteArraySerializer;
-import org.apache.kafka.common.serialization.LongSerializer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import java.util.Properties;
@@ -21,11 +20,8 @@ public class KProducer {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "KProducer");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, org.apache.kafka.common.serialization.ByteArraySerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaProtobufSerializer.class.getName());
         props.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
-//        props.put("schema.registry.url", "http://127.0.0.1:8085");
-//        props.put("kafka.schema.registry.url", "http://localhost:8081");
         props.put("auto.register.schemas", "true");
         return new KafkaProducer<>(props);
     }

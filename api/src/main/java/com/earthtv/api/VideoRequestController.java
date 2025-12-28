@@ -45,7 +45,6 @@ public class VideoRequestController {
             double doubleLongitude = Double.parseDouble(longitude);
             double doubleLatitude = Double.parseDouble(latitude);
 
-
             VideoOuterClass.Video video = VideoOuterClass.Video.getDefaultInstance();
 
             VideoOuterClass.Video.Builder builder = video.newBuilderForType();
@@ -64,21 +63,6 @@ public class VideoRequestController {
             KProducer.runProducer(builder.build());
 
             return new Response(pageActions.getProps(), 0);
-
-
-//            IProps props = new Props(this.collection, new BigDecimal(longitude), new BigDecimal(latitude), this.db);
-//
-//            IActions videoActions = new Video(props);
-//            IActions pageActions = new Page(props);
-//
-//            List<IActions> actions = new ArrayList<>();
-//            actions.add(videoActions);
-//            actions.add(pageActions);
-//
-//            IController controller = new Controller(actions);
-//            IController.updateItems(controller);
-
-
         } catch (NumberFormatException e){
             return new Response(-1);
         }
