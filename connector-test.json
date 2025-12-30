@@ -1,0 +1,18 @@
+{
+  "name": "local-file-sink-connector4",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "connection.url": "jdbc:postgresql://database:5432/postgres",
+    "connection.user": "postgres",
+    "connection.password": "postgres",
+    "topics": "request-topic",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "io.confluent.connect.protobuf.ProtobufConverter",
+    "value.converter.schema.registry.url": "http://schema-registry:8081",
+    "value.converter.schemas.enable": "true",
+    "auto.create": "true",
+    "pk.mode": "record_value",
+    "pk.fields": "video_id",
+    "insert.mode": "upsert"
+  }
+}

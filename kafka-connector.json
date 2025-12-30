@@ -6,9 +6,15 @@
   "database.password": "postgres",
   "database.dbname": "postgres",
   "database.server.name": "dbserver1",
-  "table.include.list": "public.video",
+  "table.include.list": "public.request-topic",
   "plugin.name": "pgoutput",
   "slot.name": "postgres_slot",
   "publication.name": "postgres_publication",
-  "topic.prefix": "dbserver1"
+  "topic.prefix": "dbserver1",
+  "key.converter.schemas.enable": "true",
+  "value.converter.schemas.enable": "true",
+  "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+  "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+  "key.converter.schema.registry.url": "http://schema-registry:8081",
+  "value.converter.schema.registry.url": "http://schema-registry:8081"
 }

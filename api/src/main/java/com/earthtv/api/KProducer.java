@@ -12,10 +12,10 @@ import java.util.Properties;
 //Source: https://cloudurable.com/blog/kafka-tutorial-kafka-producer/index.html
 
 public class KProducer {
-    private final static String TOPIC = "input-topic";
+    private final static String TOPIC = "request-topic";
     private final static String BOOTSTRAP_SERVERS = "localhost:9092";
 
-    private static Producer<String, VideoOuterClass.Video> createProducer() {
+    private static Producer<String, com.earthtv.protos.Video> createProducer() {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "KProducer");
@@ -26,11 +26,11 @@ public class KProducer {
         return new KafkaProducer<>(props);
     }
 
-    static void runProducer(final VideoOuterClass.Video message) throws Exception {
-        Producer<String, VideoOuterClass.Video> producer = createProducer();
+    static void runProducer(final com.earthtv.protos.Video message) throws Exception {
+        Producer<String, com.earthtv.protos.Video> producer = createProducer();
 
         try {
-            final ProducerRecord<String, VideoOuterClass.Video> record = new ProducerRecord<>(TOPIC, "0", message);
+            final ProducerRecord<String, com.earthtv.protos.Video> record = new ProducerRecord<>(TOPIC, "0", message);
             producer.send(record, (metadata, exception) -> {
                 if (exception == null) {
                     System.out.printf("Sent record (key=%s) to topic %s partition %d at offset %d%n",

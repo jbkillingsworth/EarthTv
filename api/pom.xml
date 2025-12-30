@@ -70,16 +70,23 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.8</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>4.33.0</version> <!-- Use latest 2025 version -->
+            <version>3.25.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer -->
         <!-- https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer -->
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-protobuf-serializer</artifactId>
-            <version>8.1.1</version>
+            <version>7.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.earthtv</groupId>
+            <artifactId>protos</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
@@ -89,6 +96,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>com.earthtv.api.VideoOuterClass</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                    <descriptorRefs>-->
+<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                    </descriptorRefs>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 		</plugins>
 	</build>
 

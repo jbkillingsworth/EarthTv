@@ -1,24 +1,16 @@
 package com.earthtv.api;
-import com.earthtv.api.actions.Actions;
-import com.earthtv.api.actions.IActions;
-import com.earthtv.api.controller.IController;
+
 import com.earthtv.api.database.DataBase;
-import com.earthtv.api.controller.Controller;
-import com.earthtv.api.database.IDataBase;
 import com.earthtv.api.actions.page.Page;
 import com.earthtv.api.props.IProps;
+import com.earthtv.api.actions.IActions;
 import com.earthtv.api.props.Props;
-import com.earthtv.api.actions.video.Video;
 import com.earthtv.api.response.IResponse;
 import com.earthtv.api.response.Response;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import com.earthtv.api.FrameOuterClass;
 
 @RestController
 @RequestMapping("/create-video-request")
@@ -45,9 +37,8 @@ public class VideoRequestController {
             double doubleLongitude = Double.parseDouble(longitude);
             double doubleLatitude = Double.parseDouble(latitude);
 
-            VideoOuterClass.Video video = VideoOuterClass.Video.getDefaultInstance();
-
-            VideoOuterClass.Video.Builder builder = video.newBuilderForType();
+            com.earthtv.protos.Video video = com.earthtv.protos.Video.getDefaultInstance();
+            com.earthtv.protos.Video.Builder builder = video.newBuilderForType();
             builder.setVideoId(-1);
             builder.setUserId(-1);
             builder.setStart(-1);

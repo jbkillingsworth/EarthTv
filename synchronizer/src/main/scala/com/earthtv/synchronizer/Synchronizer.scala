@@ -1,7 +1,8 @@
 package com.earthtv.synchronizer
 
-import com.earthtv.api.VideoOuterClass
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import org.apache.kafka.common.serialization.Serdes
+
 import java.util.Properties
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 import io.confluent.kafka.streams.serdes.protobuf.KafkaProtobufSerde
@@ -12,8 +13,9 @@ class Synchronizer {
   props.put(StreamsConfig.APPLICATION_ID_CONFIG, "processor-api-scala-example")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
   props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass)
-  val myValueSerde = new KafkaProtobufSerde[VideoOuterClass.Video]
-  props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, myValueSerde.getClass)
+//  val myValueSerde = new KafkaProtobufSerde[com.earthtv.protos.Video]
+  props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass)
+  props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
   props.put("schema.registry.url", "http://localhost:8081")
 
   val synchronizerTopology = new SynchronizerTopology()
