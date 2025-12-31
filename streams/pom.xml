@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>sandbox</groupId>
+    <artifactId>testJavaAndScala</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Test for Java + Scala compilation</name>
+    <description>Test for Java + Scala compilation</description>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <encoding>UTF-8</encoding>
+        <scala.version>2.13.15</scala.version>
+        <scala.compat.version>2.13</scala.compat.version>
+        <spec2.version>4.2.0</spec2.version>
+    </properties>
+    <repositories>
+        <repository>
+            <id>confluent-maven-repo</id>
+            <name>Confluent Maven Repository</name>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+        <!-- It is also good practice to include Maven Central explicitly -->
+        <repository>
+            <id>maven-central</id>
+            <name>Maven central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.25.5</version> <!-- Use latest 2025 version -->
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-protobuf-serializer</artifactId>
+            <version>7.8.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-streams-protobuf-serde -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-streams-protobuf-serde</artifactId>
+            <version>7.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version> <!-- Use a recent version -->
+        </dependency>
+        <!-- Test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams-test-utils -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams-test-utils</artifactId>
+            <version>4.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <!-- Replace _2.13 with your specific Scala version (e.g., _2.12 or _3) -->
+            <artifactId>kafka-streams-scala_2.13</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.earthtv</groupId>
+            <artifactId>protos</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.23.1</version> <!-- Use the latest version -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.23.1</version> <!-- Use the latest version -->
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.12</version> <!-- Use an appropriate version -->
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

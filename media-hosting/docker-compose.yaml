@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  cache:
+    image: tiangolo/nginx-rtmp:latest-2025-12-15
+    restart: always
+    ports:
+      - '1935:1935'
