@@ -49,7 +49,7 @@ public class VideoRequestController {
             builder.setMaxLon(doubleLongitude + WINDOW_SIZE);
             builder.setMinLat(doubleLatitude - WINDOW_SIZE);
             builder.setMaxLat(doubleLatitude + WINDOW_SIZE);
-            builder.setStatus(-1);
+            builder.setStatus(0);
 
             KProducer.runProducer(builder.build());
 

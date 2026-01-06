@@ -1,0 +1,14 @@
+syntax = "proto3";
+// The Java package for the generated classes
+option java_package = "com.earthtv.protos";
+// Generates separate .java files for each message/enum
+option java_multiple_files = true;
+// The name of the wrapper class for the entire file
+option java_outer_classname = "ImageProtos";
+message Image {
+    int32 image_id = 1;
+    int32 frame_id = 2;
+    bytes image_data = 3;
+    string frame_href = 4;
+    int32 status = 5;
+}

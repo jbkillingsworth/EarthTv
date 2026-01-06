@@ -6,7 +6,7 @@
   "database.password": "postgres",
   "database.dbname": "postgres",
   "database.server.name": "dbserver1",
-  "table.include.list": "public.request-topic",
+  "table.include.list": "public.video, public.frame, public.image",
   "plugin.name": "pgoutput",
   "slot.name": "postgres_slot",
   "publication.name": "postgres_publication",

@@ -1,6 +1,7 @@
 create-protos:
-	cd executors/proto && protoc --python_out=. --proto_path=. video.proto && \
-protoc --python_out=. --proto_path=. frame.proto
+	cd executors && protoc --python_out=. --proto_path=. video.proto && \
+protoc --python_out=. --proto_path=. frame.proto && \
+protoc --python_out=. --proto_path=. image.proto
 #protoc -I=. --java_out=. video.proto && protoc -I=. --java_out=. frame.proto
 
 mp4:
