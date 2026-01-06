@@ -1,11 +1,11 @@
 {
-  "name": "frame-sink-connector2",
+  "name": "frame-source-jdbc-sink",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
     "connection.url": "jdbc:postgresql://database:5432/postgres",
     "connection.user": "postgres",
     "connection.password": "postgres",
-    "topics": "frame-0",
+    "topics": "frame",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "io.confluent.connect.protobuf.ProtobufConverter",
     "value.converter.schema.registry.url": "http://schema-registry:8081",
@@ -13,6 +13,7 @@
     "auto.create": "true",
     "pk.mode": "record_value",
     "pk.fields": "frame_id",
-    "insert.mode": "upsert"
+    "insert.mode": "upsert",
+    "auto.evolve": "true"
   }
 }

@@ -12,7 +12,7 @@ import java.util.Properties;
 //Source: https://cloudurable.com/blog/kafka-tutorial-kafka-producer/index.html
 
 public class KProducer {
-    private final static String TOPIC = "request-topic";
+    private final static String TOPIC = "video";
     private final static String BOOTSTRAP_SERVERS = "localhost:9092";
 
     private static Producer<String, com.earthtv.protos.Video> createProducer() {

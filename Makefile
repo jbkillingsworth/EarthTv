@@ -21,13 +21,18 @@ run-app-image:
 	docker run earthtvapp:latest
 
 add-jdbc-video-sink:
-	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/video-connector.json http://localhost:8073/connectors
+	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/sinks/video-connector.json http://localhost:8073/connectors
 
 add-jdbc-frame-sink:
-	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/frame-connector.json http://localhost:8073/connectors
+	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/sinks/frame-connector.json http://localhost:8073/connectors
+
+add-jdbc-image-sink:
+	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/sinks/image-connector.json http://localhost:8073/connectors
+
+sinks: add-jdbc-video-sink add-jdbc-frame-sink add-jdbc-image-sink
 
 #
 #add-jdbc-source:
-#	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/kafka-connector.json http://localhost:8073/connectors
+#	curl -s -X POST -H "Content-Type: application/json" --data @kafka-connect/sources/debezium-connector.json http://localhost:8073/connectors
 
 all: build-base-image build-app-image run-app-image
